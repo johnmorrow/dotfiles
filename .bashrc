@@ -10,7 +10,7 @@ export EDITOR=nvim
 export GOPATH=${HOME}/go
 export HISTCONTROL=ignoredups
 export LS_COLORS='di=33:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31:mi=0:ex=35:ow=1;35'
-export PATH=${PATH}:${HOME}/bin
+export PATH=${PATH}:${HOME}/bin:/workspaces/codebase/bin
 export PYTHONPATH="/workspaces/codebase/src/python:$PYTHONPATH"
 export TERMINAL=gnome-terminal
 export VISUAL=${EDITOR}
