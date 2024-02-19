@@ -1,3 +1,4 @@
+[[ $- != *i* ]] && return
 [ -z "$PS1" ] && return
 function source_() { if [ -r $1 ]; then . $1; fi }
 function source_files() { for f in $@; do source_ $f; done }
@@ -20,15 +21,17 @@ alias ls='ls --color'
 alias rr='source ~/.bashrc'
 alias vi=${EDITOR}
 
+source_ "${HOME}/.bashrc.local"
+source_ "${HOME}/.cargo/env"
+
 function bash_precmd() {
     local last_status=$?
     printf "\033[1 q" # restore blinking box cursor
     return $last_status
 }
-if command -v starship &> /dev/null; then
-    eval "$(starship init bash)"
-fi
-PROMPT_COMMAND="bash_precmd; ${PROMPT_COMMAND}"
 
-source_ "${HOME}/.bashrc.local"
-source_ "${HOME}/.cargo/env"
+if (( SHLVL <= 2 )) && ! [ -v STARSHIP_DONE ] && command -v starship &> /dev/null; then
+    eval "$(starship init bash)"
+    PROMPT_COMMAND="bash_precmd; ${PROMPT_COMMAND}"
+    export STARSHIP_DONE=true
+fi
