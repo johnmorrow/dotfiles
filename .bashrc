@@ -21,6 +21,18 @@ alias ls='ls --color'
 alias rr='source ~/.bashrc'
 alias vi=${EDITOR}
 
+function tat {
+  name=$(basename `pwd` | sed -e 's/\.//g')
+
+  if tmux ls 2>&1 | grep "$name"; then
+    tmux attach -t "$name"
+  elif [ -f .envrc ]; then
+    direnv exec / tmux new-session -s "$name"
+  else
+    tmux new-session -s "$name"
+  fi
+}
+
 source_ "${HOME}/.bashrc.local"
 source_ "${HOME}/.cargo/env"
 
@@ -33,5 +45,5 @@ function bash_precmd() {
 if (( SHLVL <= 2 )) && ! [ -v STARSHIP_DONE ] && command -v starship &> /dev/null; then
     eval "$(starship init bash)"
     PROMPT_COMMAND="bash_precmd; ${PROMPT_COMMAND}"
-    export STARSHIP_DONE=true
+    STARSHIP_DONE=true
 fi
